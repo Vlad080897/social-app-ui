@@ -1,16 +1,48 @@
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
+import { FieldError, useForm } from "react-hook-form";
 import styled from "styled-components";
+import { useLoginApi } from "../../api/useLoginApi";
+import { authService } from "../../services/auth.service";
+
+const EMAIL_REGEX =
+  /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+type FormValues = {
+  email: string;
+  password: string;
+};
 
 export const Auth = () => {
   const [type, setType] = useState<"login" | "register">("login");
 
-  const handleLogin = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const loginFn = useLoginApi();
+
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormValues>();
+
+  const handleLogin = async (values: FormValues) => {
+    const result = await loginFn.mutateAsync({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (!result) {
+      return;
+    }
+
+    authService.saveTokens(result);
+    navigate({
+      to: "/",
+    });
   };
 
-  const handleRegister = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-  };
+  const handleRegister = () => {};
 
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -21,12 +53,30 @@ export const Auth = () => {
     <Wrapper>
       <AuthForm>
         <Title>{type}</Title>
-        <Input placeholder="email" type="email" />
-        <Input placeholder="password" type="password" />
+        <Input
+          {...register("email", {
+            required: "Email is required",
+            pattern: {
+              value: EMAIL_REGEX,
+              message: "Invalid email address",
+            },
+          })}
+          placeholder="email"
+          type="email"
+          errorMassage={errors.email}
+        />
+        {errors.email && <Error>{errors.email.message}</Error>}
+        <Input
+          {...register("password", { required: "Password is required" })}
+          placeholder="password"
+          type="password"
+          errorMassage={errors.password}
+        />
+        {errors.password && <Error>{errors.password.message}</Error>}
         {type === "login" ? (
-          <Button onClick={handleLogin}>Login</Button>
+          <Button onClick={handleSubmit(handleLogin)}>Login</Button>
         ) : (
-          <Button onClick={handleRegister}>Register</Button>
+          <Button onClick={handleSubmit(handleRegister)}>Register</Button>
         )}
 
         {type === "login"
@@ -53,7 +103,6 @@ const AuthForm = styled.form`
   align-items: center;
   width: 300px;
   height: 300px;
-  background-color: red;
 `;
 
 const Title = styled.h1`
@@ -61,14 +110,24 @@ const Title = styled.h1`
   text-transform: capitalize;
 `;
 
-const Input = styled.input`
+const Input = styled.input<{
+  errorMassage?: FieldError;
+}>`
   width: 80%;
   height: 30px;
-  margin-bottom: 10px;
+  border: ${({ errorMassage: error }) =>
+    error ? "2px solid red" : "1px solid black"};
+  border-radius: 5px;
+  margin-top: 10px;
 `;
 
 const Button = styled.button`
   width: 100px;
   height: 30px;
   margin-top: 10px;
+`;
+
+const Error = styled.span`
+  width: 80%;
+  color: red;
 `;
