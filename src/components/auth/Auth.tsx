@@ -1,6 +1,9 @@
+import { useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldError, useForm } from "react-hook-form";
 import styled from "styled-components";
+import { useLoginApi } from "../../api/useLoginApi";
+import { authService } from "../../services/auth.service";
 
 const EMAIL_REGEX =
   /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -13,13 +16,31 @@ type FormValues = {
 export const Auth = () => {
   const [type, setType] = useState<"login" | "register">("login");
 
+  const loginFn = useLoginApi();
+
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<FormValues>();
 
-  const handleLogin = () => {};
+  const handleLogin = async (values: FormValues) => {
+    const result = await loginFn.mutateAsync({
+      email: values.email,
+      password: values.password,
+    });
+
+    if (!result) {
+      return;
+    }
+
+    authService.saveTokens(result);
+    navigate({
+      to: "/",
+    });
+  };
 
   const handleRegister = () => {};
 
@@ -42,14 +63,14 @@ export const Auth = () => {
           })}
           placeholder="email"
           type="email"
-          error={!!errors.email}
+          errorMassage={errors.email}
         />
         {errors.email && <Error>{errors.email.message}</Error>}
         <Input
           {...register("password", { required: "Password is required" })}
           placeholder="password"
           type="password"
-          error={!!errors.password}
+          errorMassage={errors.password}
         />
         {errors.password && <Error>{errors.password.message}</Error>}
         {type === "login" ? (
@@ -90,12 +111,14 @@ const Title = styled.h1`
 `;
 
 const Input = styled.input<{
-  error: boolean;
+  errorMassage?: FieldError;
 }>`
   width: 80%;
   height: 30px;
-  border: ${({ error }) => (error ? "2px solid red" : "1px solid black")};
+  border: ${({ errorMassage: error }) =>
+    error ? "2px solid red" : "1px solid black"};
   border-radius: 5px;
+  margin-top: 10px;
 `;
 
 const Button = styled.button`
