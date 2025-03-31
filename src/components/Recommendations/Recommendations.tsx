@@ -15,4 +15,5 @@ const Wrapper = styled.div`
   width: 100%;
   max-width: 300px;
   height: 100%;
+  flex: 0 0 auto;
 `;
