@@ -1,4 +1,4 @@
-import { authService } from "../services/auth.service";
+import { authService } from "../services/auth/auth.service";
 
 export interface RouterContextInterface {
   isAuthenticated: () => Promise<boolean>;
