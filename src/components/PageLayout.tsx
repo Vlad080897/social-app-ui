@@ -22,8 +22,7 @@ function PageLayout() {
 }
 
 const PageLayoutWrapper = styled.div`
-  display: grid;
-  grid-template-columns: 25% 50% 25%;
+  display: flex;
   width: 100%;
   height: 100%;
 `;
@@ -31,6 +30,7 @@ const PageLayoutWrapper = styled.div`
 const OuterWrapper = styled.div`
   height: 100%;
   background-color: #eef8ff;
+  flex: 1 1 auto;
 `;
 
 export default PageLayout;
