@@ -1,6 +1,7 @@
-import { LoginSchema } from "../schemas/auth.schema";
+import { LoginSchema } from "../../schemas/auth.schema";
+import { BaseAuth } from "./types";
 
-class AuthService {
+class AuthService implements BaseAuth {
   getAuthToken() {
     return localStorage.getItem("accessToken");
   }
@@ -14,7 +15,7 @@ class AuthService {
     localStorage.setItem("refreshToken", loginResult.refreshToken);
   }
 
-  async isAuthenticated() {
+  isAuthenticated() {
     return Boolean(this.getAuthToken() && this.getRefreshToken());
   }
 }
