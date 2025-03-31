@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { routeTree } from "./routeTree.gen.ts";
 import { makeRouterContext } from "./context/routerContext.tsx";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import "./main.css";
 
 const routerContext = makeRouterContext();
 

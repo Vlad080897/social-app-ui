@@ -11,15 +11,28 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SecuredRouteImport } from './routes/_secured/route'
 import { Route as SecuredIndexImport } from './routes/_secured/index'
+import { Route as SecuredSettingsImport } from './routes/_secured/settings'
 import { Route as AuthAuthImport } from './routes/_auth/auth'
 
 // Create/Update Routes
 
-const SecuredIndexRoute = SecuredIndexImport.update({
-  id: '/_secured/',
-  path: '/',
+const SecuredRouteRoute = SecuredRouteImport.update({
+  id: '/_secured',
   getParentRoute: () => rootRoute,
+} as any)
+
+const SecuredIndexRoute = SecuredIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SecuredRouteRoute,
+} as any)
+
+const SecuredSettingsRoute = SecuredSettingsImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => SecuredRouteRoute,
 } as any)
 
 const AuthAuthRoute = AuthAuthImport.update({
@@ -32,6 +45,13 @@ const AuthAuthRoute = AuthAuthImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/_secured': {
+      id: '/_secured'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof SecuredRouteImport
+      parentRoute: typeof rootRoute
+    }
     '/_auth/auth': {
       id: '/_auth/auth'
       path: '/auth'
@@ -39,51 +59,82 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAuthImport
       parentRoute: typeof rootRoute
     }
+    '/_secured/settings': {
+      id: '/_secured/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SecuredSettingsImport
+      parentRoute: typeof SecuredRouteImport
+    }
     '/_secured/': {
       id: '/_secured/'
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof SecuredIndexImport
-      parentRoute: typeof rootRoute
+      parentRoute: typeof SecuredRouteImport
     }
   }
 }
 
 // Create and export the route tree
 
+interface SecuredRouteRouteChildren {
+  SecuredSettingsRoute: typeof SecuredSettingsRoute
+  SecuredIndexRoute: typeof SecuredIndexRoute
+}
+
+const SecuredRouteRouteChildren: SecuredRouteRouteChildren = {
+  SecuredSettingsRoute: SecuredSettingsRoute,
+  SecuredIndexRoute: SecuredIndexRoute,
+}
+
+const SecuredRouteRouteWithChildren = SecuredRouteRoute._addFileChildren(
+  SecuredRouteRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
+  '': typeof SecuredRouteRouteWithChildren
   '/auth': typeof AuthAuthRoute
+  '/settings': typeof SecuredSettingsRoute
   '/': typeof SecuredIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/auth': typeof AuthAuthRoute
+  '/settings': typeof SecuredSettingsRoute
   '/': typeof SecuredIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
+  '/_secured': typeof SecuredRouteRouteWithChildren
   '/_auth/auth': typeof AuthAuthRoute
+  '/_secured/settings': typeof SecuredSettingsRoute
   '/_secured/': typeof SecuredIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/auth' | '/'
+  fullPaths: '' | '/auth' | '/settings' | '/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/'
-  id: '__root__' | '/_auth/auth' | '/_secured/'
+  to: '/auth' | '/settings' | '/'
+  id:
+    | '__root__'
+    | '/_secured'
+    | '/_auth/auth'
+    | '/_secured/settings'
+    | '/_secured/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
+  SecuredRouteRoute: typeof SecuredRouteRouteWithChildren
   AuthAuthRoute: typeof AuthAuthRoute
-  SecuredIndexRoute: typeof SecuredIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
+  SecuredRouteRoute: SecuredRouteRouteWithChildren,
   AuthAuthRoute: AuthAuthRoute,
-  SecuredIndexRoute: SecuredIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -96,15 +147,27 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/_auth/auth",
+        "/_secured",
+        "/_auth/auth"
+      ]
+    },
+    "/_secured": {
+      "filePath": "_secured/route.tsx",
+      "children": [
+        "/_secured/settings",
         "/_secured/"
       ]
     },
     "/_auth/auth": {
       "filePath": "_auth/auth.tsx"
     },
+    "/_secured/settings": {
+      "filePath": "_secured/settings.tsx",
+      "parent": "/_secured"
+    },
     "/_secured/": {
-      "filePath": "_secured/index.tsx"
+      "filePath": "_secured/index.tsx",
+      "parent": "/_secured"
     }
   }
 }

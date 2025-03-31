@@ -1,15 +1,6 @@
-import { createFileRoute, redirect } from "@tanstack/react-router";
-import App from "../../components/App";
+import { createFileRoute } from "@tanstack/react-router";
+import Profile from "../../components/Profile/Profile";
 
 export const Route = createFileRoute("/_secured/")({
-  component: App,
-  async beforeLoad({ context }) {
-    if (await context.isAuthenticated()) {
-      return;
-    }
-
-    throw redirect({
-      to: "/auth",
-    });
-  },
+  component: Profile,
 });
