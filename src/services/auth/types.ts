@@ -6,3 +6,10 @@ export interface BaseAuth {
   saveTokens(loginResult: LoginSchema): void;
   isAuthenticated(): boolean;
 }
+
+export type User = {
+  id: number;
+  username: string;
+  iat: number;
+  exp: number;
+};

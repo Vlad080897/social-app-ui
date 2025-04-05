@@ -31,6 +31,7 @@ const OuterWrapper = styled.div`
   height: 100%;
   background-color: #eef8ff;
   flex: 1 1 auto;
+  padding: 20px;
 `;
 
 export default PageLayout;

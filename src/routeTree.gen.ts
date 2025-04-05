@@ -15,6 +15,8 @@ import { Route as SecuredRouteImport } from './routes/_secured/route'
 import { Route as SecuredIndexImport } from './routes/_secured/index'
 import { Route as SecuredSettingsImport } from './routes/_secured/settings'
 import { Route as AuthAuthImport } from './routes/_auth/auth'
+import { Route as SecuredProfileIdIndexImport } from './routes/_secured/profile/$id/index'
+import { Route as SecuredProfileIdSettingsIndexImport } from './routes/_secured/profile/$id/settings/index'
 
 // Create/Update Routes
 
@@ -40,6 +42,19 @@ const AuthAuthRoute = AuthAuthImport.update({
   path: '/auth',
   getParentRoute: () => rootRoute,
 } as any)
+
+const SecuredProfileIdIndexRoute = SecuredProfileIdIndexImport.update({
+  id: '/profile/$id/',
+  path: '/profile/$id/',
+  getParentRoute: () => SecuredRouteRoute,
+} as any)
+
+const SecuredProfileIdSettingsIndexRoute =
+  SecuredProfileIdSettingsIndexImport.update({
+    id: '/profile/$id/settings/',
+    path: '/profile/$id/settings/',
+    getParentRoute: () => SecuredRouteRoute,
+  } as any)
 
 // Populate the FileRoutesByPath interface
 
@@ -73,6 +88,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SecuredIndexImport
       parentRoute: typeof SecuredRouteImport
     }
+    '/_secured/profile/$id/': {
+      id: '/_secured/profile/$id/'
+      path: '/profile/$id'
+      fullPath: '/profile/$id'
+      preLoaderRoute: typeof SecuredProfileIdIndexImport
+      parentRoute: typeof SecuredRouteImport
+    }
+    '/_secured/profile/$id/settings/': {
+      id: '/_secured/profile/$id/settings/'
+      path: '/profile/$id/settings'
+      fullPath: '/profile/$id/settings'
+      preLoaderRoute: typeof SecuredProfileIdSettingsIndexImport
+      parentRoute: typeof SecuredRouteImport
+    }
   }
 }
 
@@ -81,11 +110,15 @@ declare module '@tanstack/react-router' {
 interface SecuredRouteRouteChildren {
   SecuredSettingsRoute: typeof SecuredSettingsRoute
   SecuredIndexRoute: typeof SecuredIndexRoute
+  SecuredProfileIdIndexRoute: typeof SecuredProfileIdIndexRoute
+  SecuredProfileIdSettingsIndexRoute: typeof SecuredProfileIdSettingsIndexRoute
 }
 
 const SecuredRouteRouteChildren: SecuredRouteRouteChildren = {
   SecuredSettingsRoute: SecuredSettingsRoute,
   SecuredIndexRoute: SecuredIndexRoute,
+  SecuredProfileIdIndexRoute: SecuredProfileIdIndexRoute,
+  SecuredProfileIdSettingsIndexRoute: SecuredProfileIdSettingsIndexRoute,
 }
 
 const SecuredRouteRouteWithChildren = SecuredRouteRoute._addFileChildren(
@@ -97,12 +130,16 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthAuthRoute
   '/settings': typeof SecuredSettingsRoute
   '/': typeof SecuredIndexRoute
+  '/profile/$id': typeof SecuredProfileIdIndexRoute
+  '/profile/$id/settings': typeof SecuredProfileIdSettingsIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/auth': typeof AuthAuthRoute
   '/settings': typeof SecuredSettingsRoute
   '/': typeof SecuredIndexRoute
+  '/profile/$id': typeof SecuredProfileIdIndexRoute
+  '/profile/$id/settings': typeof SecuredProfileIdSettingsIndexRoute
 }
 
 export interface FileRoutesById {
@@ -111,19 +148,29 @@ export interface FileRoutesById {
   '/_auth/auth': typeof AuthAuthRoute
   '/_secured/settings': typeof SecuredSettingsRoute
   '/_secured/': typeof SecuredIndexRoute
+  '/_secured/profile/$id/': typeof SecuredProfileIdIndexRoute
+  '/_secured/profile/$id/settings/': typeof SecuredProfileIdSettingsIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '' | '/auth' | '/settings' | '/'
+  fullPaths:
+    | ''
+    | '/auth'
+    | '/settings'
+    | '/'
+    | '/profile/$id'
+    | '/profile/$id/settings'
   fileRoutesByTo: FileRoutesByTo
-  to: '/auth' | '/settings' | '/'
+  to: '/auth' | '/settings' | '/' | '/profile/$id' | '/profile/$id/settings'
   id:
     | '__root__'
     | '/_secured'
     | '/_auth/auth'
     | '/_secured/settings'
     | '/_secured/'
+    | '/_secured/profile/$id/'
+    | '/_secured/profile/$id/settings/'
   fileRoutesById: FileRoutesById
 }
 
@@ -155,7 +202,9 @@ export const routeTree = rootRoute
       "filePath": "_secured/route.tsx",
       "children": [
         "/_secured/settings",
-        "/_secured/"
+        "/_secured/",
+        "/_secured/profile/$id/",
+        "/_secured/profile/$id/settings/"
       ]
     },
     "/_auth/auth": {
@@ -167,6 +216,14 @@ export const routeTree = rootRoute
     },
     "/_secured/": {
       "filePath": "_secured/index.tsx",
+      "parent": "/_secured"
+    },
+    "/_secured/profile/$id/": {
+      "filePath": "_secured/profile/$id/index.tsx",
+      "parent": "/_secured"
+    },
+    "/_secured/profile/$id/settings/": {
+      "filePath": "_secured/profile/$id/settings/index.tsx",
       "parent": "/_secured"
     }
   }

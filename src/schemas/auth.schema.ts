@@ -4,6 +4,8 @@ export const loginSchema = z.object({
   accessToken: z.string(),
   refreshToken: z.string(),
   message: z.string(),
+  id: z.number(),
+  username: z.string(),
 });
 
 export type LoginSchema = z.infer<typeof loginSchema>;

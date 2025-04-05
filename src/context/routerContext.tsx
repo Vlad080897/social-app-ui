@@ -1,10 +1,21 @@
 import { authService } from "../services/auth/auth.service";
+import { User } from "../services/auth/types";
 
 export interface RouterContextInterface {
-  isAuthenticated: () => Promise<boolean>;
+  isAuthenticated: () => boolean;
+  getUser: () => User | undefined;
+  logout: () => void;
 }
 export const makeRouterContext = (): RouterContextInterface => ({
-  async isAuthenticated() {
-    return await authService.isAuthenticated();
+  isAuthenticated() {
+    return authService.isAuthenticated();
+  },
+
+  getUser() {
+    return authService.getUser();
+  },
+
+  logout() {
+    authService.logout();
   },
 });
