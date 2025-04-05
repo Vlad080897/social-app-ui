@@ -39,8 +39,10 @@ export const Auth = () => {
 
     if (!result) return;
 
-    authService.saveTokens(result);
-    navigate({ to: "/" });
+    const { accessToken, refreshToken, id } = result;
+
+    authService.saveTokens({ accessToken, refreshToken });
+    navigate({ to: `/profile/$id`, params: { id: id.toString() } });
   };
 
   const handleRegister = async (values: FormValues) => {

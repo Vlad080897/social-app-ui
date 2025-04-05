@@ -1,6 +1,17 @@
-import { createFileRoute } from "@tanstack/react-router";
-import Profile from "../../components/Profile/Profile";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_secured/")({
-  component: Profile,
+  beforeLoad: ({ context }) => {
+    const user = context.getUser();
+
+    if (!user) {
+      context.logout();
+      return;
+    }
+
+    throw redirect({
+      to: "/profile/$id",
+      params: { id: user?.id.toString() || "" },
+    });
+  },
 });

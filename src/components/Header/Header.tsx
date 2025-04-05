@@ -19,7 +19,7 @@ export const Header = () => {
         <Box sx={{ display: "flex", gap: 10 }}>
           <Logo />
           <Search
-            placeholder="Search"
+            placeholder="Search for friends here..."
             startAdornment={
               <InputAdornment position="start">
                 <SearchIcon style={{ color: "#6b7280" }} />
@@ -43,7 +43,7 @@ export const Header = () => {
               </Typography>
               <Typography sx={{ fontSize: "13px" }}>@CaptainAmerica</Typography>
             </Box>
-            <Box sx={{ display: "flex", gap: 2, ml: 2 }}>
+            <Box sx={{ display: "flex", gap: 2, ml: 4 }}>
               <IconButton sx={{ ...iconButtonStyle }}>
                 <Settings />
               </IconButton>
@@ -79,7 +79,7 @@ const Logo = styled.div`
   width: 55px;
   height: 55px;
   border-radius: 8px;
-  background-image: url("public/images/logo.png");
+  background-image: url("/images/logo.png");
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -117,7 +117,7 @@ const UserLogo = styled.div<{
   width: 55px;
   height: 55px;
   border-radius: 8px;
-  background-image: url(${({ userPhoto }) => userPhoto || "public/images/user.png"}););
+  background-image: url(${({ userPhoto }) => userPhoto || "/images/user.png"}););
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
