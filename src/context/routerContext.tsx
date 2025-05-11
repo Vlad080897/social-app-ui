@@ -3,7 +3,7 @@ import { User } from "../services/auth/types";
 
 export interface RouterContextInterface {
   isAuthenticated: () => boolean;
-  getUser: () => User | undefined;
+  getUser: () => User | null;
   logout: () => void;
 }
 export const makeRouterContext = (): RouterContextInterface => ({

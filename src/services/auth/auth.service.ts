@@ -26,14 +26,13 @@ class AuthService implements BaseAuth {
     const token = this.getAuthToken();
 
     if (!token) {
-      return;
+      return null;
     }
 
     const decodedToken = jwtDecode(token) as User;
 
     if (this.isTokenExpired(decodedToken)) {
-      this.logout();
-      return;
+      return null;
     }
 
     return decodedToken;
