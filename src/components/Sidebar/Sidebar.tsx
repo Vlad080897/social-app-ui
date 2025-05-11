@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import { Button } from "@mui/material";
 import LogoutIcon from "@mui/icons-material/Logout";
+import { Button } from "@mui/material";
+import styled from "styled-components";
 import { authService } from "../../services/auth/auth.service";
 import { useRouter } from "@tanstack/react-router";
 
