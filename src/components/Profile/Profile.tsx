@@ -4,8 +4,6 @@ import CreatePost from "./CreatePost";
 import Posts from "./Posts";
 
 const Profile = () => {
-  console.log("heree");
-
   const { posts, handleDeletePost } = usePosts();
 
   return (

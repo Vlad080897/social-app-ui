@@ -1,9 +1,9 @@
 import { DeleteOutline } from "@mui/icons-material";
 import { Box, IconButton, Typography } from "@mui/material";
-import { useIsOwner } from "../../api/useIsOwner";
+import { useIsOwner } from "../../hooks/useIsOwner";
 import { Post } from "../../schemas/posts.schema";
 import { UserLogo } from "../../shared/components/UserLogo";
-import { useOwnerId } from "../../hooks/useOwnerId";
+import { useOwner } from "../../hooks/useOwner";
 
 type Props = {
   posts?: Post[];
@@ -11,8 +11,8 @@ type Props = {
 };
 
 const Posts: React.FC<Props> = ({ posts, handleDeletePost }) => {
+  const owner = useOwner();
   const isOwner = useIsOwner();
-  const id = useOwnerId();
 
   return posts?.map((post) => (
     <Box
@@ -50,7 +50,7 @@ const Posts: React.FC<Props> = ({ posts, handleDeletePost }) => {
           ))}
         </Box>
       </Box>
-      {(isOwner || id === post.creator.id) && (
+      {(isOwner || owner.id === post.creator.id) && (
         <IconButton onClick={() => handleDeletePost(post.id)}>
           <DeleteOutline color="error" />
         </IconButton>

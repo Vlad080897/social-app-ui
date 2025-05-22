@@ -1,7 +1,7 @@
 import { authService } from "../services/auth/auth.service";
 
-export const useOwnerId = () => {
+export const useOwner = () => {
   const user = authService.getUser();
 
-  return user?.id;
+  return user!;
 };

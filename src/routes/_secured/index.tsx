@@ -11,7 +11,7 @@ export const Route = createFileRoute("/_secured/")({
 
     throw redirect({
       to: "/profile/$id",
-      params: { id: user?.id.toString() || "" },
+      params: { id: user.id.toString() },
     });
   },
 });

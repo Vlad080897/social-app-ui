@@ -1,7 +1,7 @@
 import { useState } from "react";
 import useCreatePostApi from "../api/useCreatePostApi";
 import usePostsApi from "../api/usePostsApi";
-import { useOwnerId } from "./useOwnerId";
+import { useOwner } from "./useOwner";
 import { readAndCompressImage } from "browser-image-resizer";
 import { useDeletePostApi } from "../api/useDeletePostApi";
 
@@ -9,7 +9,7 @@ export const usePosts = () => {
   const [postValue, setPostValue] = useState("");
   const [images, setImages] = useState<Blob[]>([]);
 
-  const creator = useOwnerId();
+  const creator = useOwner();
 
   const { posts, refetch: refetchPosts } = usePostsApi();
   const { mutateAsync: createPostAsync } = useCreatePostApi();
@@ -19,7 +19,7 @@ export const usePosts = () => {
     const formData = new FormData();
 
     formData.append("content", postValue);
-    formData.append("creator", String(creator));
+    formData.append("creator", String(creator.id));
     formData.append("title", "");
 
     images.forEach((image) => {

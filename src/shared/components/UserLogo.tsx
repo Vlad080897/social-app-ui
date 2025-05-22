@@ -4,12 +4,12 @@ import styled from "styled-components";
 type Props = {
   variant?: "small" | "medium";
   url?: string;
-  id?: number;
+  id: number;
 };
 
 export const UserLogo: React.FC<Props> = ({ variant = "small", url, id }) => {
   return (
-    <Link to="/profile/$id" params={{ id: id?.toString() ?? "" }}>
+    <Link to="/profile/$id" params={{ id: id.toString() }}>
       <Logo $variant={variant} $url={url} />
     </Link>
   );

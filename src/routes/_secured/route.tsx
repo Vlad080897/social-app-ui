@@ -4,7 +4,7 @@ import PageLayout from "../../components/PageLayout";
 export const Route = createFileRoute("/_secured")({
   component: PageLayout,
   beforeLoad: async ({ context }) => {
-    if (await context.isAuthenticated()) {
+    if (context.isAuthenticated()) {
       return;
     }
 

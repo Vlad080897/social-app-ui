@@ -12,8 +12,11 @@ import {
   Notifications,
 } from "@mui/icons-material";
 import { UserLogo } from "../../shared/components/UserLogo";
+import { useOwner } from "../../hooks/useOwner";
 
 export const Header = () => {
+  const owner = useOwner();
+
   return (
     <Wrapper>
       <HeaderContent>
@@ -31,7 +34,7 @@ export const Header = () => {
 
         <Box>
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <UserLogo />
+            <UserLogo id={owner.id} />
             <Box
               sx={{
                 display: "flex",
@@ -111,18 +114,6 @@ const Search = styled(Input)`
     }
   }
 `;
-
-// const UserLogo = styled.div<{
-//   userPhoto?: string;
-// }>`
-//   width: 55px;
-//   height: 55px;
-//   border-radius: 8px;
-//   background-image: url(${({ userPhoto }) => userPhoto || "/images/user.png"}););
-//   background-size: cover;
-//   background-repeat: no-repeat;
-//   background-position: center;
-// `;
 
 const iconButtonStyle = {
   width: "55px",
