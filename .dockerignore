@@ -1,0 +1,30 @@
+# Test files
+**/*.test.*
+**/*.spec.*
+**/__tests__/
+coverage/
+
+# TypeScript build info
+**/*.tsbuildinfo
+**/tsconfig.*.json
+
+# Development files
+.eslintrc*
+.prettier*
+.editorconfig
+.github/
+.husky/
+
+# Cache directories
+.cache/
+.npm/
+.yarn/
+
+# Debug files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS files
+.DS_Store
+Thumbs.db

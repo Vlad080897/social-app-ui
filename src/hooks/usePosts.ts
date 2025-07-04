@@ -2,7 +2,6 @@ import { useState } from "react";
 import useCreatePostApi from "../api/useCreatePostApi";
 import usePostsApi from "../api/usePostsApi";
 import { useOwner } from "./useOwner";
-import { readAndCompressImage } from "browser-image-resizer";
 import { useDeletePostApi } from "../api/useDeletePostApi";
 
 export const usePosts = () => {
@@ -44,15 +43,19 @@ export const usePosts = () => {
 
     const newFile = e.target.files[0];
 
-    const formattedImage = await readAndCompressImage(newFile, {
-      maxHeight: 500,
-      maxWidth: 500,
-      quality: 10,
-      mimeType: "image/jpeg",
-      debug: true,
-    });
+    try {
+      // const formattedImage = await readAndCompressImage(newFile, {
+      //   maxHeight: 500,
+      //   maxWidth: 500,
+      //   quality: 1,
+      //   mimeType: "image/jpeg",
+      //   debug: true,
+      // });
 
-    setImages((prev) => [...prev, formattedImage]);
+      setImages((prev) => [...prev, newFile]);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return {

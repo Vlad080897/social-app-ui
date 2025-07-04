@@ -14,49 +14,51 @@ const Posts: React.FC<Props> = ({ posts, handleDeletePost }) => {
   const owner = useOwner();
   const isOwner = useIsOwner();
 
-  return posts?.map((post) => (
-    <Box
-      key={post.id}
-      sx={{
-        width: "100%",
-        height: "auto",
-        minHeight: "100px",
-        padding: "10px",
-        boxSizing: "border-box",
-        backgroundColor: "#ffffff",
-        borderRadius: "4px",
-        display: "flex",
-        gap: 2,
-        mb: 5,
-        mt: 5,
-      }}
-    >
-      <UserLogo url={post.creator.photos[0]?.url} id={post.creator.id} />
-      <Box sx={{ width: "100%" }}>
-        <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-          <Typography>
-            {post.creator.firstName} {post.creator.lastName}
-          </Typography>
-          <Typography sx={{ fontSize: "13px", color: "#6b7280" }}>
-            @{post.creator.username.toLowerCase()}
-          </Typography>
+  return posts?.map((post) => {
+    return (
+      <Box
+        key={post.id}
+        sx={{
+          width: "100%",
+          height: "auto",
+          minHeight: "100px",
+          padding: "10px",
+          boxSizing: "border-box",
+          backgroundColor: "#ffffff",
+          borderRadius: "4px",
+          display: "flex",
+          gap: 2,
+          mb: 5,
+          mt: 5,
+        }}
+      >
+        <UserLogo url={post.creator.photos[0]?.url} id={post.creator.id} />
+        <Box sx={{ width: "100%" }}>
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+            <Typography>
+              {post.creator.firstName} {post.creator.lastName}
+            </Typography>
+            <Typography sx={{ fontSize: "13px", color: "#6b7280" }}>
+              @{post.creator.username.toLowerCase()}
+            </Typography>
+          </Box>
+          <Box sx={{ mt: 1, width: "100%" }}>
+            <Typography>{post.content}</Typography>
+          </Box>
+          <Box>
+            {post.photos.map((photo) => (
+              <img key={photo.id} src={photo.url} alt="" />
+            ))}
+          </Box>
         </Box>
-        <Box sx={{ mt: 1, width: "100%" }}>
-          <Typography>{post.content}</Typography>
-        </Box>
-        <Box>
-          {post.photos.map((photo) => (
-            <img src={photo.url} alt="" />
-          ))}
-        </Box>
+        {(isOwner || owner.id === post.creator.id) && (
+          <IconButton onClick={() => handleDeletePost(post.id)}>
+            <DeleteOutline color="error" />
+          </IconButton>
+        )}
       </Box>
-      {(isOwner || owner.id === post.creator.id) && (
-        <IconButton onClick={() => handleDeletePost(post.id)}>
-          <DeleteOutline color="error" />
-        </IconButton>
-      )}
-    </Box>
-  ));
+    );
+  });
 };
 
 export default Posts;
